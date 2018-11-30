@@ -33,6 +33,7 @@ export default class Login extends React.Component {
                         message: "Login successful",
                         user: { ...initialUser }
                     });
+                    this.props.checkin();
                 } else {
                     throw new Error();
                 }

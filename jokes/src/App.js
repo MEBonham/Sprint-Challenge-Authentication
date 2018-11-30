@@ -64,7 +64,10 @@ class App extends Component {
         <section>
           <Switch>
             <Route path="/signup" component={Register} />
-            <Route path="/signin" component={Login} />
+            <Route path="/signin" render={props => <Login 
+              {...props} 
+              checkin={this.authenticate}
+              loggedIn={this.state.loggedIn} />} />
           </Switch>
           {this.state.jokes.map(joke => (
             <div key={joke.id}>
