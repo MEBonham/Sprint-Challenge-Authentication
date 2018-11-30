@@ -1,28 +1,81 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import axios from "axios";
+import { NavLink, Switch, Route, withRouter } from "react-router-dom";
+
+import Register from "./components/Register";
+import Login from "./components/Login";
+
 import './App.css';
 
+const url = process.env.REACT_APP_API_URL;
+
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loggedIn: false,
+      jokes: []
+    };
+  }
+
+  authenticate = () => {
+    const token = localStorage.getItem("Merty");
+    if (token) {
+      const options = {
+        headers: {
+          Authorization: token
+        }
+      };
+      axios.get(`${url}/api/jokes`, options)
+        .then(res => {
+          if (res.data) {
+            this.setState({ loggedIn: true, jokes: res.data });
+          } else {
+            throw new Error();
+          }
+        })
+        .catch(err => {
+          this.props.history.push("/signin");
+        });
+    } else {
+      this.props.history.push("/signin");
+    }
+  }
+
+  componentDidMount() {
+    this.authenticate();
+  }
+
+  // componentDidUpdate(prevProps) {
+  //   const { pathname } = this.props.location;
+  //   if (pathname !== prevProps.location.pathname) {
+  //     this.authenticate();
+  //   }
+  // }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <nav>
+          <NavLink to="/">Home</NavLink>
+          <NavLink to="/signup">Sign Up</NavLink>
+          <NavLink to="/signin">Sign In</NavLink>
+        </nav>
+        <section>
+          <Switch>
+            <Route path="/signup" component={Register} />
+            <Route path="/signin" component={Login} />
+          </Switch>
+          {this.state.jokes.map(joke => (
+            <div>
+              <p>{joke.setup}</p>
+              <p>{joke.punchline}</p>
+            </div>
+          ))}
+        </section>
       </div>
     );
   }
 }
 
-export default App;
+export default withRouter(App);
