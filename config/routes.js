@@ -33,10 +33,12 @@ function register(req, res) {
   const creds = req.body;
   const hash = bcrypt.hashSync(creds.password, rounds);
   creds.password = hash;
+  console.log(creds);
 
   db("users")
     .insert(creds)
     .then(ids => {
+      console.log("Flag");
       res.status(201).json(ids);
     })
     .catch(err => {

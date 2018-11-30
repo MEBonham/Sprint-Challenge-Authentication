@@ -28,7 +28,7 @@ export default class Login extends React.Component {
             .then(res => {
                 // console.log(res.data);
                 if (res.status === 200 && res.data) {
-                    localStorage.setItem("secretBitcoinToken", res.data.token);
+                    localStorage.setItem("Merty", res.data.token);
                     this.setState({
                         message: "Login successful",
                         user: { ...initialUser }

@@ -48,7 +48,7 @@ class App extends Component {
 
   // componentDidUpdate(prevProps) {
   //   const { pathname } = this.props.location;
-  //   if (pathname !== prevProps.location.pathname) {
+  //   if (pathname === "/" && pathname !== prevProps.location.pathname) {
   //     this.authenticate();
   //   }
   // }
@@ -67,7 +67,7 @@ class App extends Component {
             <Route path="/signin" component={Login} />
           </Switch>
           {this.state.jokes.map(joke => (
-            <div>
+            <div key={joke.id}>
               <p>{joke.setup}</p>
               <p>{joke.punchline}</p>
             </div>
